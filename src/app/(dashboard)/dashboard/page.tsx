@@ -1,18 +1,18 @@
 'use client';
 
 import { useAuth } from '@/contexts/AuthContext';
-import { ProfileCompletionWidget } from '@/components/dashboard/ProfileCompletionWidget';
-import { 
-  PlacementScoreWidget,
-  MissingSkillsWidget,
-  AiSuggestionsWidget,
-  UpcomingGoalsWidget,
-  ResumeWidget,
-  GitHubWidget,
-  CodingWidget,
-  JobMatchWidget,
-  ActivityWidget
-} from '@/components/dashboard/DashboardWidgets';
+import dynamic from 'next/dynamic';
+
+const ProfileCompletionWidget = dynamic(() => import('@/components/dashboard/ProfileCompletionWidget').then(mod => mod.ProfileCompletionWidget));
+const PlacementScoreWidget = dynamic(() => import('@/components/dashboard/DashboardWidgets').then(mod => mod.PlacementScoreWidget));
+const MissingSkillsWidget = dynamic(() => import('@/components/dashboard/DashboardWidgets').then(mod => mod.MissingSkillsWidget));
+const AiSuggestionsWidget = dynamic(() => import('@/components/dashboard/DashboardWidgets').then(mod => mod.AiSuggestionsWidget));
+const UpcomingGoalsWidget = dynamic(() => import('@/components/dashboard/DashboardWidgets').then(mod => mod.UpcomingGoalsWidget));
+const ResumeWidget = dynamic(() => import('@/components/dashboard/DashboardWidgets').then(mod => mod.ResumeWidget));
+const GitHubWidget = dynamic(() => import('@/components/dashboard/DashboardWidgets').then(mod => mod.GitHubWidget));
+const CodingWidget = dynamic(() => import('@/components/dashboard/DashboardWidgets').then(mod => mod.CodingWidget));
+const JobMatchWidget = dynamic(() => import('@/components/dashboard/DashboardWidgets').then(mod => mod.JobMatchWidget));
+const ActivityWidget = dynamic(() => import('@/components/dashboard/DashboardWidgets').then(mod => mod.ActivityWidget));
 
 export default function DashboardPage() {
   const { appUser } = useAuth();
