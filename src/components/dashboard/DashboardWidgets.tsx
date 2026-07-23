@@ -33,7 +33,7 @@ function useDashboardAnalysis() {
     queryKey: ['dashboardAnalysis'],
     queryFn: async () => {
       const res = await api.getDashboardAnalysis();
-      return res.data;
+      return res.data.data;
     },
     staleTime: 60000,
   });
@@ -182,8 +182,8 @@ export function ResumeWidget() {
   if (error) return <WidgetError onRetry={refetch} />;
 
   const resume = res?.data;
-  const score = resume?.parsedData?.overallScore || null;
-  const ats = resume?.parsedData?.atsCompatibility || null;
+  const score = resume?.parsedData?.analysis?.resumeScore || resume?.parsedData?.overallScore || null;
+  const ats = resume?.parsedData?.analysis?.atsScore || resume?.parsedData?.analysis?.atsScoreDashboard?.atsCompatibility || resume?.parsedData?.atsCompatibility || null;
   const date = resume?.updatedAt ? new Date(resume.updatedAt).toLocaleDateString() : null;
 
   return (

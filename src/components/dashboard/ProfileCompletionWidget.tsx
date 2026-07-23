@@ -11,7 +11,7 @@ export function ProfileCompletionWidget() {
     queryKey: ['profileCompleteness'],
     queryFn: async () => {
       const res = await api.getCompleteness();
-      return res.data;
+      return res.data.data;
     },
     refetchInterval: 30000
   });
