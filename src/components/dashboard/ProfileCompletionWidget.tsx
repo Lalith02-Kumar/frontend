@@ -117,7 +117,7 @@ export function ProfileCompletionWidget() {
           {score === 100 && (
             <div className="flex items-center gap-2 text-sm text-text-secondary mt-2">
               <CheckCircle2 className="w-5 h-5 text-success" />
-              You've unlocked the full potential of AI-powered job recommendations!
+              You&apos;ve unlocked the full potential of AI-powered job recommendations!
             </div>
           )}
         </div>

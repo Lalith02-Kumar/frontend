@@ -45,7 +45,7 @@ export default function SecuritySection({ user }: { user: any }) {
             Change Password
           </CardTitle>
           <CardDescription>
-            We'll send a secure link to {user?.email} to reset your password.
+            We&apos;ll send a secure link to {user?.email} to reset your password.
           </CardDescription>
         </CardHeader>
         <CardContent>
