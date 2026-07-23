@@ -36,11 +36,45 @@ apiClient.interceptors.response.use(
 export const api = {
   // Auth
   getMe: () => apiClient.get('/auth/me'),
+  changePassword: () => apiClient.post('/auth/change-password'),
+  revokeSessions: () => apiClient.post('/auth/revoke-sessions'),
 
   // Profile
   getProfile: () => apiClient.get('/profile'),
   updateProfile: (data: any) => apiClient.put('/profile', data),
   getCompleteness: () => apiClient.get('/profile/completeness'),
+  
+  // Profile Sections
+  updatePersonal: (data: any) => apiClient.put('/profile/personal', data),
+  updateAcademic: (data: any) => apiClient.put('/profile/academic', data),
+  updateCareer: (data: any) => apiClient.put('/profile/career', data),
+  updatePreferences: (data: any) => apiClient.put('/profile/preferences', data),
+
+  // Skills
+  addSkill: (data: any) => apiClient.post('/profile/skills', data),
+  updateSkill: (id: string, data: any) => apiClient.put(`/profile/skills/${id}`, data),
+  deleteSkill: (id: string) => apiClient.delete(`/profile/skills/${id}`),
+
+  // Projects
+  addProject: (data: any) => apiClient.post('/profile/projects', data),
+  updateProject: (id: string, data: any) => apiClient.put(`/profile/projects/${id}`, data),
+  deleteProject: (id: string) => apiClient.delete(`/profile/projects/${id}`),
+
+  // Certificates
+  addCertificate: (data: any) => apiClient.post('/profile/certificates', data),
+  updateCertificate: (id: string, data: any) => apiClient.put(`/profile/certificates/${id}`, data),
+  deleteCertificate: (id: string) => apiClient.delete(`/profile/certificates/${id}`),
+  uploadCertificate: async (id: string, file: File) => {
+    const form = new FormData();
+    form.append('certificate', file);
+    const token = await auth.currentUser?.getIdToken();
+    return apiClient.post(`/profile/certificates/${id}/upload`, form, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${token}`
+      },
+    });
+  },
 
   // Resume
   getResume: () => apiClient.get('/resume'),
@@ -72,6 +106,8 @@ export const api = {
   connectCoding: (platform: string, username: string) =>
     apiClient.post('/coding/connect', { platform, username }),
   disconnectCoding: (platform: string) => apiClient.delete(`/coding/${platform}`),
+  getCodingAnalysis: () => apiClient.get('/coding/analysis'),
+  analyzeCodingProfiles: () => apiClient.post('/coding/analyze'),
 
   // Analysis
   getAnalyses: () => apiClient.get('/analysis'),
@@ -86,10 +122,20 @@ export const api = {
   getDashboard: () => apiClient.get('/dashboard'),
 
   // Jobs
-  getJobRecommendations: (analysisId?: string) => 
-    analysisId ? apiClient.get(`/jobs/recommendations/${analysisId}`) : apiClient.get('/jobs/recommendations'),
+  getJobRecommendations: (params?: { analysisId?: string; location?: string; isRemote?: boolean; isHybrid?: boolean; jobType?: string; company?: string }) => {
+    if (params?.analysisId) {
+      return apiClient.get(`/jobs/recommendations/${params.analysisId}`);
+    }
+    const filteredParams = Object.fromEntries(
+      Object.entries(params || {}).filter(([_, v]) => v !== undefined && v !== '')
+    );
+    const qs = new URLSearchParams(filteredParams as any).toString();
+    return apiClient.get(`/jobs/recommendations${qs ? '?' + qs : ''}`);
+  },
   getJobHistory: () => apiClient.get('/jobs/history'),
   refreshJobRecommendations: (analysisId?: string) => 
     apiClient.post('/jobs/recommendations/refresh', { analysisId }),
   getJob: (id: string) => apiClient.get(`/jobs/${id}`),
+  saveJob: (id: string, status: 'SAVED' | 'APPLY_LATER' | 'APPLIED') => apiClient.post(`/jobs/${id}/save`, { status }),
+  getSavedJobs: () => apiClient.get('/jobs/saved'),
 };

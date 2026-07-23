@@ -18,6 +18,8 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { cn } from '@/lib/utils';
+import { useQuery } from '@tanstack/react-query';
+import { api } from '@/lib/api';
 
 const NAV_ITEMS = [
   {
@@ -54,6 +56,17 @@ const NAV_ITEMS = [
 export function DashboardSidebar() {
   const pathname = usePathname();
   const { appUser, logout } = useAuth();
+
+  const { data: completenessData } = useQuery({
+    queryKey: ['profileCompleteness'],
+    queryFn: async () => {
+      const res = await api.getCompleteness();
+      return res.data;
+    },
+    refetchInterval: 30000 // Poll every 30s
+  });
+
+  const completeness = completenessData?.score || 0;
 
   return (
     <aside className="fixed left-0 top-0 h-full w-64 border-r border-white/[0.05] flex flex-col z-40"
@@ -124,6 +137,19 @@ export function DashboardSidebar() {
 
       {/* User */}
       <div className="border-t border-white/[0.05] p-3">
+        <div className="px-3 pb-3 pt-1">
+          <div className="flex justify-between items-center mb-1">
+            <span className="text-[10px] font-semibold text-text-secondary uppercase">Profile</span>
+            <span className="text-[10px] font-bold text-primary">{completeness}%</span>
+          </div>
+          <div className="h-1.5 w-full bg-surface-3 rounded-full overflow-hidden">
+            <div 
+              className="h-full bg-primary transition-all duration-1000 ease-out"
+              style={{ width: `${completeness}%` }}
+            />
+          </div>
+        </div>
+
         <div className="flex items-center gap-3 px-2 py-2">
           {appUser?.photoURL ? (
             <img src={appUser.photoURL} alt={appUser.displayName} className="w-8 h-8 rounded-full" />

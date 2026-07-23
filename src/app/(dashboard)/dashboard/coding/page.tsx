@@ -9,7 +9,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { api } from '@/lib/api';
-import { Loader2, Code2, Trophy, Target, Activity, CheckCircle2, Trash2, AlertCircle } from 'lucide-react';
+import { Loader2, Code2, Trophy, Target, Activity, CheckCircle2, Trash2, AlertCircle, Sparkles, BrainCircuit, ExternalLink } from 'lucide-react';
 import { toast } from 'sonner';
 
 const PLATFORMS = ['LEETCODE', 'CODEFORCES', 'CODECHEF', 'GFG', 'HACKERRANK'] as const;
@@ -32,6 +32,33 @@ export default function CodingPage() {
 
   const profiles = codingResponse?.data || [];
   const hasPending = profiles.some((p: any) => p.status === 'PENDING');
+
+  const { data: analysisResponse, isLoading: isLoadingAnalysis, refetch: refetchAnalysis } = useQuery({
+    queryKey: ['codingAnalysis'],
+    queryFn: async () => {
+      try {
+        const res = await api.getCodingAnalysis();
+        return res.data;
+      } catch (e) {
+        return null;
+      }
+    },
+  });
+  const analysis = analysisResponse?.data;
+
+  const analyzeMutation = useMutation({
+    mutationFn: async () => {
+      const res = await api.analyzeCodingProfiles();
+      return res.data;
+    },
+    onSuccess: () => {
+      toast.success('AI Analysis complete!');
+      refetchAnalysis();
+    },
+    onError: (err: any) => {
+      toast.error(err.message || 'Failed to analyze profiles');
+    },
+  });
 
   const {
     register,
@@ -131,14 +158,98 @@ export default function CodingPage() {
 
   return (
     <div className="w-full max-w-5xl mx-auto space-y-6">
-      <div className="mb-8">
-        <h1 className="text-3xl font-display font-bold text-text mb-2">Coding Profiles</h1>
-        <p className="text-text-secondary">Sync your competitive programming profiles to track your problem-solving skills.</p>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+        <div>
+          <h1 className="text-3xl font-display font-bold text-text mb-2">Coding Profiles</h1>
+          <p className="text-text-secondary">Sync your competitive programming profiles to track your problem-solving skills.</p>
+        </div>
+        {profiles.length > 0 && (
+          <Button 
+            onClick={() => analyzeMutation.mutate()} 
+            disabled={analyzeMutation.isPending || hasPending}
+            className="flex items-center gap-2"
+          >
+            {analyzeMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
+            {analysis ? 'Refresh AI Insights' : 'Generate AI Insights'}
+          </Button>
+        )}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Content: Connected Profiles */}
         <div className="lg:col-span-2 space-y-6">
+          {analysis && (
+            <Card glass className="border-primary/20 overflow-hidden relative">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-accent"></div>
+              <CardContent className="pt-6">
+                <div className="flex items-center gap-2 mb-6">
+                  <BrainCircuit className="w-6 h-6 text-primary" />
+                  <h2 className="text-xl font-bold text-text">AI Profile Analysis</h2>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                  <div className="bg-surface-3/50 p-4 rounded-xl border border-border">
+                    <div className="text-sm text-text-secondary mb-1">Coding Score</div>
+                    <div className="text-3xl font-bold text-primary">{analysis.codingScore}<span className="text-lg text-text-secondary">/100</span></div>
+                  </div>
+                  <div className="bg-surface-3/50 p-4 rounded-xl border border-border">
+                    <div className="text-sm text-text-secondary mb-1">DSA Readiness</div>
+                    <div className="text-lg font-semibold text-text">{analysis.dsaReadiness}</div>
+                  </div>
+                  <div className="bg-surface-3/50 p-4 rounded-xl border border-border">
+                    <div className="text-sm text-text-secondary mb-1">Interview Readiness</div>
+                    <div className="text-lg font-semibold text-text">{analysis.interviewReadiness}</div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                  <div>
+                    <h4 className="text-sm font-medium text-text-secondary mb-3">Strong Topics</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {analysis.strongTopics?.map((topic: string, i: number) => (
+                        <span key={i} className="px-3 py-1 bg-green-500/10 text-green-500 rounded-full text-xs font-medium border border-green-500/20">{topic}</span>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-medium text-text-secondary mb-3">Needs Improvement</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {analysis.weakTopics?.map((topic: string, i: number) => (
+                        <span key={i} className="px-3 py-1 bg-danger/10 text-danger rounded-full text-xs font-medium border border-danger/20">{topic}</span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {analysis.recommendedProblems?.length > 0 && (
+                  <div>
+                    <h4 className="text-sm font-medium text-text-secondary mb-3">Recommended Practice</h4>
+                    <div className="space-y-2">
+                      {analysis.recommendedProblems.map((prob: any, i: number) => (
+                        <a key={i} href={prob.url} target="_blank" rel="noreferrer" className="flex items-center justify-between p-3 rounded-lg border border-border bg-surface hover:border-primary/50 transition-colors">
+                          <div>
+                            <div className="font-medium text-sm text-text flex items-center gap-2">
+                              {prob.title}
+                              <ExternalLink className="w-3 h-3 text-text-secondary" />
+                            </div>
+                            <div className="text-xs text-text-secondary mt-0.5">{prob.platform}</div>
+                          </div>
+                          <span className={`text-xs font-medium px-2 py-1 rounded ${
+                            prob.difficulty === 'Easy' ? 'bg-green-500/10 text-green-500' :
+                            prob.difficulty === 'Medium' ? 'bg-yellow-500/10 text-yellow-500' :
+                            'bg-red-500/10 text-red-500'
+                          }`}>
+                            {prob.difficulty}
+                          </span>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          )}
+
           {profiles.length > 0 ? (
             <div className="grid gap-6">
               {profiles.map((profile: any) => (

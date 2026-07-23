@@ -4,6 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@/lib/api';
 import { DashboardWidgets } from '@/components/dashboard/DashboardWidgets';
+import { ProfileCompletionWidget } from '@/components/dashboard/ProfileCompletionWidget';
 import { Loader2 } from 'lucide-react';
 
 export default function DashboardPage() {
@@ -33,7 +34,10 @@ export default function DashboardPage() {
       ) : error ? (
         <div className="text-warning">Error loading dashboard data.</div>
       ) : response?.data ? (
-        <DashboardWidgets summary={response.data} />
+        <>
+          <ProfileCompletionWidget />
+          <DashboardWidgets summary={response.data} />
+        </>
       ) : (
         <div className="text-text-secondary">No dashboard data available.</div>
       )}
