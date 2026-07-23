@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState, useRef } from 'react';
+import { useQuery, useMutation, useQueryClient, keepPreviousData } from '@tanstack/react-query';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -24,12 +24,20 @@ export default function JobsPage() {
   });
   
   const [debouncedFilters, setDebouncedFilters] = useState(filters);
+  const debounceRef = useRef<NodeJS.Timeout | null>(null);
   
-  // Apply filters with a small delay
+  // Apply filters with a proper cleared debounce delay
   const handleFilterChange = (key: string, value: any) => {
     const newFilters = { ...filters, [key]: value };
     setFilters(newFilters);
-    setTimeout(() => setDebouncedFilters(newFilters), 500);
+    
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+    
+    debounceRef.current = setTimeout(() => {
+      setDebouncedFilters(newFilters);
+    }, 500);
   };
 
   const { data: response, isLoading, refetch } = useQuery({
@@ -38,6 +46,7 @@ export default function JobsPage() {
       const res = await api.getJobRecommendations(debouncedFilters);
       return res.data;
     },
+    placeholderData: keepPreviousData,
   });
 
   const cards = response?.data || [];
