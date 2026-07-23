@@ -120,6 +120,8 @@ export const api = {
 
   // Dashboard
   getDashboard: () => apiClient.get('/dashboard'),
+  getActivity: () => apiClient.get('/dashboard/activity'),
+  getDashboardAnalysis: () => apiClient.get('/dashboard/analysis'),
 
   // Jobs
   getJobRecommendations: (params?: { analysisId?: string; location?: string; isRemote?: boolean; isHybrid?: boolean; jobType?: string; company?: string }) => {

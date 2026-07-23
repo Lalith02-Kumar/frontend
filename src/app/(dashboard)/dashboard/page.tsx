@@ -1,22 +1,21 @@
 'use client';
 
 import { useAuth } from '@/contexts/AuthContext';
-import { useQuery } from '@tanstack/react-query';
-import { api } from '@/lib/api';
-import { DashboardWidgets } from '@/components/dashboard/DashboardWidgets';
 import { ProfileCompletionWidget } from '@/components/dashboard/ProfileCompletionWidget';
-import { Loader2 } from 'lucide-react';
+import { 
+  PlacementScoreWidget,
+  MissingSkillsWidget,
+  AiSuggestionsWidget,
+  UpcomingGoalsWidget,
+  ResumeWidget,
+  GitHubWidget,
+  CodingWidget,
+  JobMatchWidget,
+  ActivityWidget
+} from '@/components/dashboard/DashboardWidgets';
 
 export default function DashboardPage() {
   const { appUser } = useAuth();
-
-  const { data: response, isLoading, error } = useQuery({
-    queryKey: ['dashboard'],
-    queryFn: async () => {
-      const res = await api.getDashboard();
-      return res.data;
-    },
-  });
 
   return (
     <div className="space-y-6">
@@ -27,20 +26,40 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {isLoading ? (
-        <div className="flex items-center justify-center h-64">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      <ProfileCompletionWidget />
+
+      {/* Main Command Center Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        
+        {/* Core Scores */}
+        <div className="flex flex-col gap-6 h-full">
+          <PlacementScoreWidget />
+          <ResumeWidget />
         </div>
-      ) : error ? (
-        <div className="text-warning">Error loading dashboard data.</div>
-      ) : response?.data ? (
-        <>
-          <ProfileCompletionWidget />
-          <DashboardWidgets summary={response.data} />
-        </>
-      ) : (
-        <div className="text-text-secondary">No dashboard data available.</div>
-      )}
+
+        {/* Technical Scores */}
+        <div className="flex flex-col gap-6 h-full">
+          <GitHubWidget />
+          <CodingWidget />
+        </div>
+
+        {/* Job Matching & Analytics */}
+        <div className="flex flex-col gap-6 h-full xl:col-span-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
+            <JobMatchWidget />
+            <MissingSkillsWidget />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
+            <UpcomingGoalsWidget />
+            <AiSuggestionsWidget />
+          </div>
+        </div>
+      </div>
+
+      {/* Footer Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <ActivityWidget />
+      </div>
     </div>
   );
 }
