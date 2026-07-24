@@ -31,7 +31,7 @@ export function ProfileCompletionWidget() {
   return (
     <Card glass className="mb-6 overflow-hidden relative">
       {/* Background Gradient Effect */}
-      <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none" />
+      <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none" />
       
       <div className="flex flex-col md:flex-row gap-6 p-6">
         {/* Left: Progress Circle */}
@@ -44,7 +44,7 @@ export function ProfileCompletionWidget() {
                 cy="64"
                 r="56"
                 fill="none"
-                stroke="rgba(255,255,255,0.05)"
+                stroke="rgba(0,0,0,0.03)"
                 strokeWidth="8"
               />
               <circle
@@ -61,8 +61,8 @@ export function ProfileCompletionWidget() {
               />
               <defs>
                 <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#00C2FF" />
-                  <stop offset="100%" stopColor="#5BE7FF" />
+                  <stop offset="0%" stopColor="var(--primary)" />
+                  <stop offset="100%" stopColor="var(--primary-hover)" />
                 </linearGradient>
               </defs>
             </svg>

@@ -10,29 +10,29 @@ export function formatScore(score: number): string {
 }
 
 export function getScoreColor(score: number): string {
-  if (score >= 80) return '#00D97E';
-  if (score >= 60) return '#00C2FF';
-  if (score >= 40) return '#FFB547';
-  return '#FF6B6B';
+  if (score >= 80) return '#5EBE7A';
+  if (score >= 60) return '#6EC5FF';
+  if (score >= 40) return '#FFD57C';
+  return '#E05B5B';
 }
 
 export function getGradeColor(grade: string): string {
-  switch (grade) {
-    case 'A': return '#00D97E';
-    case 'B': return '#00C2FF';
-    case 'C': return '#FFB547';
-    case 'D': return '#FF6B6B';
-    default: return '#98A2B3';
+  switch (grade.toUpperCase()) {
+    case 'A': return '#5EBE7A';
+    case 'B': return '#6EC5FF';
+    case 'C': return '#FFD57C';
+    case 'D': return '#E05B5B';
+    default: return '#9CA3AF';
   }
 }
 
 export function getPriorityColor(priority: string): string {
-  switch (priority) {
-    case 'CRITICAL': return '#FF6B6B';
-    case 'HIGH': return '#FFB547';
-    case 'MEDIUM': return '#00C2FF';
-    case 'LOW': return '#98A2B3';
-    default: return '#98A2B3';
+  switch (priority.toUpperCase()) {
+    case 'CRITICAL': return '#E05B5B';
+    case 'HIGH': return '#FFD57C';
+    case 'MEDIUM': return '#6EC5FF';
+    case 'LOW': return '#9CA3AF';
+    default: return '#9CA3AF';
   }
 }
 

@@ -24,8 +24,8 @@ export function DashboardTopBar() {
   )?.[1] || { title: 'PlacementIQ', subtitle: '' };
 
   return (
-    <header className="h-16 border-b border-white/[0.05] flex items-center justify-between px-8 flex-shrink-0"
-      style={{ background: 'rgba(6,7,10,0.8)', backdropFilter: 'blur(20px)' }}>
+    <header className="h-16 border-b border-border flex items-center justify-between px-8 flex-shrink-0"
+      style={{ background: 'rgba(252,251,248,0.8)', backdropFilter: 'blur(20px)' }}>
       <div>
         <h2 className="text-base font-display font-semibold text-text">{pageInfo.title}</h2>
         {pageInfo.subtitle && (
@@ -35,25 +35,25 @@ export function DashboardTopBar() {
 
       <div className="flex items-center gap-3">
         {/* Search */}
-        <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg border border-white/[0.06] text-sm text-text-secondary cursor-text"
-          style={{ background: 'rgba(255,255,255,0.02)' }}>
+        <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg border border-border text-sm text-text-secondary cursor-text"
+          style={{ background: 'var(--surface-2)' }}>
           <Search className="w-3.5 h-3.5" />
           <span className="text-xs">Search...</span>
-          <kbd className="ml-4 text-[10px] px-1.5 py-0.5 rounded" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}>⌘K</kbd>
+          <kbd className="ml-4 text-[10px] px-1.5 py-0.5 rounded text-text-secondary" style={{ background: 'var(--surface-3)', border: '1px solid var(--border)' }}>⌘K</kbd>
         </div>
 
         {/* Notifications */}
-        <button className="relative w-8 h-8 rounded-lg flex items-center justify-center text-text-secondary hover:text-text hover:bg-white/[0.04] transition-all">
+        <button className="relative w-8 h-8 rounded-lg flex items-center justify-center text-text-secondary hover:text-text hover:bg-black/[0.03] transition-all">
           <Bell className="w-4 h-4" />
           <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-primary" />
         </button>
 
         {/* Avatar */}
         {appUser?.photoURL ? (
-          <img src={appUser.photoURL} alt={appUser.displayName} className="w-8 h-8 rounded-full border border-white/[0.1]" />
+          <img src={appUser.photoURL} alt={appUser.displayName} className="w-8 h-8 rounded-full border border-border" />
         ) : (
-          <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium border border-white/[0.1]"
-            style={{ background: 'linear-gradient(135deg, #00C2FF, #5BE7FF)', color: '#06070A' }}>
+          <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium border border-border"
+            style={{ background: 'var(--gradient-primary)', color: '#FFFFFF' }}>
             {appUser?.displayName?.[0] || 'U'}
           </div>
         )}

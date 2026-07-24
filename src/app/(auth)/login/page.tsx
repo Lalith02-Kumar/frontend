@@ -42,18 +42,6 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-bg flex items-center justify-center p-6 relative overflow-hidden">
-      {/* Background glow */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] opacity-15"
-          style={{ background: 'radial-gradient(ellipse at center top, #18BADD, transparent 65%)' }}
-        />
-        <div
-          className="absolute bottom-0 right-0 w-[400px] h-[300px] opacity-10"
-          style={{ background: 'radial-gradient(ellipse at bottom right, #3039A1, transparent 65%)' }}
-        />
-      </div>
-
       <motion.div
         className="relative w-full max-w-md"
         initial={{ opacity: 0, y: 30, scale: 0.95 }}
@@ -63,8 +51,8 @@ export default function LoginPage() {
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 mb-6">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #18BADD, #3039A1)' }}>
-              <span className="text-bg font-display font-bold text-base">P</span>
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'var(--gradient-primary)' }}>
+              <span className="text-white font-display font-bold text-base">P</span>
             </div>
             <span className="font-display font-semibold text-text text-xl">PlacementIQ</span>
           </Link>
@@ -73,11 +61,11 @@ export default function LoginPage() {
         </div>
 
         {/* Card */}
-        <div className="glass-card gradient-border p-8">
+        <div className="bg-white border border-border rounded-2xl shadow-card p-8">
           {error && (
             <motion.div
               className="flex items-center gap-2 p-3 rounded-xl mb-6 text-sm"
-              style={{ background: 'rgba(255,107,107,0.08)', border: '1px solid rgba(255,107,107,0.2)', color: '#FF6B6B' }}
+              style={{ background: 'rgba(224,91,91,0.08)', border: '1px solid rgba(224,91,91,0.2)', color: 'var(--danger)' }}
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
             >
@@ -90,20 +78,7 @@ export default function LoginPage() {
             id="google-signin-btn"
             onClick={handleGoogleSignIn}
             disabled={signing}
-            className="w-full flex items-center justify-center gap-3 py-3.5 px-6 rounded-xl font-medium text-sm transition-all duration-200 border"
-            style={{
-              background: 'rgba(255,255,255,0.04)',
-              borderColor: 'rgba(255,255,255,0.12)',
-              color: '#F5F7FA',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(255,255,255,0.08)';
-              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'rgba(255,255,255,0.04)';
-              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)';
-            }}
+            className="w-full flex items-center justify-center gap-3 py-3.5 px-6 rounded-xl font-medium text-sm transition-all duration-200 border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 shadow-sm"
           >
             {signing ? (
               <Loader2 className="w-5 h-5 animate-spin text-primary" />
@@ -120,16 +95,16 @@ export default function LoginPage() {
 
           <div className="relative my-6">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-white/[0.06]" />
+              <div className="w-full border-t border-border" />
             </div>
             <div className="relative flex justify-center">
-              <span className="bg-surface px-3 text-xs text-text-secondary">or</span>
+              <span className="bg-white px-3 text-xs text-text-secondary">or</span>
             </div>
           </div>
 
           <p className="text-center text-sm text-text-secondary">
             Don&apos;t have an account?{' '}
-            <Link href="/signup" className="text-primary hover:text-accent transition-colors font-medium">
+            <Link href="/signup" className="text-primary hover:underline transition-colors font-semibold">
               Get started free
             </Link>
           </p>

@@ -69,15 +69,15 @@ export function DashboardSidebar() {
   const completeness = completenessData?.score || 0;
 
   return (
-    <aside className="fixed left-0 top-0 h-full w-64 border-r border-white/[0.05] flex flex-col z-40"
-      style={{ background: 'rgba(17,19,24,0.95)', backdropFilter: 'blur(20px)' }}>
+    <aside className="fixed left-0 top-0 h-full w-64 border-r border-border flex flex-col z-40"
+      style={{ background: 'var(--surface-2)', backdropFilter: 'blur(20px)' }}>
 
       {/* Logo */}
-      <div className="p-5 border-b border-white/[0.05]">
+      <div className="p-5 border-b border-border">
         <Link href="/dashboard" className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-            style={{ background: 'linear-gradient(135deg, #00C2FF, #5BE7FF)' }}>
-            <span className="text-bg font-display font-bold text-sm">P</span>
+            style={{ background: 'var(--gradient-primary)' }}>
+            <span className="text-white font-display font-bold text-sm">P</span>
           </div>
           <span className="font-display font-semibold text-text">PlacementIQ</span>
         </Link>
@@ -122,11 +122,11 @@ export function DashboardSidebar() {
       <div className="px-3 mb-3">
         <Link href="/dashboard/analysis/new">
           <div
-            className="flex items-center gap-2 p-3 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer"
+            className="flex items-center gap-2 p-3 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer hover:opacity-90"
             style={{
-              background: 'linear-gradient(135deg, rgba(0,194,255,0.15), rgba(91,231,255,0.08))',
-              border: '1px solid rgba(0,194,255,0.2)',
-              color: '#00C2FF',
+              background: 'linear-gradient(135deg, rgba(67, 110, 87, 0.12), rgba(67, 110, 87, 0.06))',
+              border: '1px solid rgba(67, 110, 87, 0.2)',
+              color: 'var(--primary)',
             }}
           >
             <Zap className="w-4 h-4" />
@@ -136,7 +136,7 @@ export function DashboardSidebar() {
       </div>
 
       {/* User */}
-      <div className="border-t border-white/[0.05] p-3">
+      <div className="border-t border-border p-3">
         <div className="px-3 pb-3 pt-1">
           <div className="flex justify-between items-center mb-1">
             <span className="text-[10px] font-semibold text-text-secondary uppercase">Profile</span>
@@ -155,7 +155,7 @@ export function DashboardSidebar() {
             <img src={appUser.photoURL} alt={appUser.displayName} className="w-8 h-8 rounded-full" />
           ) : (
             <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium"
-              style={{ background: 'linear-gradient(135deg, #00C2FF, #5BE7FF)', color: '#06070A' }}>
+              style={{ background: 'var(--gradient-primary)', color: '#FFFFFF' }}>
               {appUser?.displayName?.[0] || 'U'}
             </div>
           )}
