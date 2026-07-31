@@ -46,6 +46,12 @@ body {
   line-height: 1.6;
 }
 
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-muted) !important;
+  opacity: 0.55 !important;
+}
+
 /* ─── Selection ──────────────────────────────────────────────────────────────── */
 ::selection {
   background: rgba(67, 110, 87, 0.15);
@@ -160,7 +166,8 @@ code, pre, .mono {
   }
 
   .input-field::placeholder {
-    color: var(--text-secondary);
+    color: var(--text-muted) !important;
+    opacity: 0.55 !important;
   }
 
   .input-field:focus {
