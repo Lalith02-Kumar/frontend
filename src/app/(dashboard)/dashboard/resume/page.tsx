@@ -93,7 +93,7 @@ export default function ResumePage() {
     if (forceAnalyze) {
       setForceAnalyze(false);
     }
-  }, [analysis]);
+  }, [analysis, forceAnalyze]);
 
   // Poll for background uploads
   useEffect(() => {

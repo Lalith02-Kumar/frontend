@@ -152,7 +152,10 @@ export function DashboardSidebar() {
 
         <div className="flex items-center gap-3 px-2 py-2">
           {appUser?.photoURL ? (
-            <img src={appUser.photoURL} alt={appUser.displayName} className="w-8 h-8 rounded-full" />
+            <>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={appUser.photoURL} alt={appUser.displayName} className="w-8 h-8 rounded-full" />
+            </>
           ) : (
             <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium"
               style={{ background: 'var(--gradient-primary)', color: '#FFFFFF' }}>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -11,7 +11,7 @@ import { Loader2, Save } from 'lucide-react';
 
 export default function PersonalForm({ user, onDirtyChange }: { user: any, onDirtyChange: (isDirty: boolean) => void }) {
   const queryClient = useQueryClient();
-  const profile = user?.profile || {};
+  const profile = useMemo(() => user?.profile || {}, [user?.profile]);
 
   const [formData, setFormData] = useState({
     fullName: profile.fullName || '',

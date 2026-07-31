@@ -50,7 +50,10 @@ export function DashboardTopBar() {
 
         {/* Avatar */}
         {appUser?.photoURL ? (
-          <img src={appUser.photoURL} alt={appUser.displayName} className="w-8 h-8 rounded-full border border-border" />
+          <>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={appUser.photoURL} alt={appUser.displayName} className="w-8 h-8 rounded-full border border-border" />
+          </>
         ) : (
           <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium border border-border"
             style={{ background: 'var(--gradient-primary)', color: '#FFFFFF' }}>

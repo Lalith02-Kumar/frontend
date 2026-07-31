@@ -155,7 +155,7 @@ export default function GitHubPage() {
     if (forceAnalyze) {
       setForceAnalyze(false);
     }
-  }, [analysis]);
+  }, [analysis, forceAnalyze]);
 
   // Autoscroll chatbot
   useEffect(() => {

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -17,7 +17,7 @@ const TARGET_ROLES = [
 
 export default function CareerForm({ user, onDirtyChange }: { user: any, onDirtyChange: (isDirty: boolean) => void }) {
   const queryClient = useQueryClient();
-  const profile = user?.profile || {};
+  const profile = useMemo(() => user?.profile || {}, [user?.profile]);
 
   const [formData, setFormData] = useState({
     targetRole: profile.targetRole || 'SOFTWARE_ENGINEER',
