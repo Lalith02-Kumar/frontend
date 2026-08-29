@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { api } from '@/lib/api';
@@ -54,6 +54,7 @@ import {
 } from 'recharts';
 
 export default function ResumePage() {
+  const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState<'overview' | 'quality' | 'grammar' | 'keywords' | 'skills' | 'projects' | 'insights' | 'history'>('overview');
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [chatMessage, setChatMessage] = useState('');
@@ -119,8 +120,9 @@ export default function ResumePage() {
       return res.data.data;
     },
     onSuccess: () => {
+      queryClient.removeQueries({ queryKey: ['resumeAnalysis'] });
       refetchResume();
-      toast.success('Resume uploaded! Processing in background...');
+      toast.success('Document uploaded! Analyzing content...');
     },
     onError: (err: any) => {
       toast.error(err.message || 'Failed to upload resume');
@@ -263,11 +265,18 @@ export default function ResumePage() {
 
       {/* Failed State */}
       {resume?.status === 'FAILED' && (
-        <Card glass className="border-danger/20 p-8 text-center flex flex-col items-center justify-center">
-          <AlertCircle className="w-16 h-16 text-danger mb-4" />
-          <h2 className="text-xl font-bold text-text mb-2">Resume Processing Failed</h2>
-          <p className="text-text-secondary mb-6">{resume.errorMessage || 'We experienced an issue parsing this file.'}</p>
-          <Button variant="outline" className="btn-ghost" onClick={() => fileInputRef.current?.click()}>Try Again</Button>
+        <Card glass className="border-danger/30 p-10 text-center flex flex-col items-center justify-center min-h-[350px]">
+          <div className="w-16 h-16 rounded-2xl bg-danger/10 flex items-center justify-center mb-4 border border-danger/20">
+            <AlertCircle className="w-10 h-10 text-danger" />
+          </div>
+          <h2 className="text-xl font-bold text-text mb-2">Invalid Document Uploaded</h2>
+          <p className="text-text-secondary max-w-md mb-6 text-sm">
+            {resume.errorMessage || 'The uploaded file does not appear to be a valid resume or CV. Please upload a valid PDF or Word document.'}
+          </p>
+          <Button className="btn-primary" onClick={() => fileInputRef.current?.click()}>
+            <UploadCloud className="w-4 h-4 mr-2" />
+            Upload Valid Resume (PDF/Word)
+          </Button>
         </Card>
       )}
 

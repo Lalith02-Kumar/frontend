@@ -293,44 +293,66 @@ export default function CodingPage() {
                     )}
 
                     {profile.status === 'COMPLETED' && profile.stats && (
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                        <div className="bg-surface-3/50 p-3 rounded-lg border border-border">
-                          <div className="flex items-center gap-1.5 text-text-secondary mb-1">
-                            <CheckCircle2 className="w-3.5 h-3.5" />
-                            <span className="text-xs font-medium">Solved</span>
+                      <div className="space-y-4">
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                          <div className="bg-surface-3/50 p-3 rounded-lg border border-border">
+                            <div className="flex items-center gap-1.5 text-text-secondary mb-1">
+                              <CheckCircle2 className="w-3.5 h-3.5" />
+                              <span className="text-xs font-medium">Total Solved</span>
+                            </div>
+                            <div className="text-xl font-bold text-text">{profile.stats.totalSolved ?? 'N/A'}</div>
                           </div>
-                          <div className="text-xl font-bold text-text">{profile.stats.totalSolved || 0}</div>
+                          
+                          {(profile.stats.rating !== undefined || profile.stats.maxRating !== undefined) && (
+                            <div className="bg-surface-3/50 p-3 rounded-lg border border-border">
+                              <div className="flex items-center gap-1.5 text-text-secondary mb-1">
+                                <Target className="w-3.5 h-3.5" />
+                                <span className="text-xs font-medium">Rating</span>
+                              </div>
+                              <div className="text-xl font-bold text-text">
+                                {profile.stats.rating ?? profile.stats.maxRating ?? 'N/A'}
+                                {profile.stats.maxRating && profile.stats.rating && (
+                                  <span className="text-xs text-text-secondary font-normal ml-1">(Max {profile.stats.maxRating})</span>
+                                )}
+                              </div>
+                            </div>
+                          )}
+                          
+                          {(profile.stats.rank || profile.stats.globalRank) && (
+                            <div className="bg-surface-3/50 p-3 rounded-lg border border-border">
+                              <div className="flex items-center gap-1.5 text-text-secondary mb-1">
+                                <Trophy className="w-3.5 h-3.5" />
+                                <span className="text-xs font-medium">Rank</span>
+                              </div>
+                              <div className="text-lg font-bold text-text truncate" title={profile.stats.rank || `#${profile.stats.globalRank}`}>
+                                {profile.stats.rank || `#${profile.stats.globalRank}`}
+                              </div>
+                            </div>
+                          )}
+                          
+                          {(profile.stats.easySolved !== undefined || profile.stats.mediumSolved !== undefined || profile.stats.hardSolved !== undefined) && (
+                            <div className="bg-surface-3/50 p-3 rounded-lg border border-border">
+                              <div className="flex items-center gap-1.5 text-text-secondary mb-1">
+                                <Activity className="w-3.5 h-3.5" />
+                                <span className="text-xs font-medium">Breakdown</span>
+                              </div>
+                              <div className="flex gap-2 text-xs font-semibold mt-1">
+                                <span className="text-green-500 font-bold">{profile.stats.easySolved || 0}E</span>
+                                <span className="text-yellow-500 font-bold">{profile.stats.mediumSolved || 0}M</span>
+                                <span className="text-red-500 font-bold">{profile.stats.hardSolved || 0}H</span>
+                              </div>
+                            </div>
+                          )}
                         </div>
-                        
-                        {(profile.stats.rating || profile.stats.maxRating) && (
-                          <div className="bg-surface-3/50 p-3 rounded-lg border border-border">
-                            <div className="flex items-center gap-1.5 text-text-secondary mb-1">
-                              <Target className="w-3.5 h-3.5" />
-                              <span className="text-xs font-medium">Rating</span>
-                            </div>
-                            <div className="text-xl font-bold text-text">{profile.stats.rating || profile.stats.maxRating}</div>
-                          </div>
-                        )}
-                        
-                        {profile.stats.rank && (
-                          <div className="bg-surface-3/50 p-3 rounded-lg border border-border">
-                            <div className="flex items-center gap-1.5 text-text-secondary mb-1">
-                              <Trophy className="w-3.5 h-3.5" />
-                              <span className="text-xs font-medium">Rank</span>
-                            </div>
-                            <div className="text-lg font-bold text-text truncate" title={profile.stats.rank}>
-                              {profile.stats.rank}
-                            </div>
-                          </div>
-                        )}
-                        
-                        {profile.stats.contestsParticipated !== undefined && (
-                          <div className="bg-surface-3/50 p-3 rounded-lg border border-border">
-                            <div className="flex items-center gap-1.5 text-text-secondary mb-1">
-                              <Activity className="w-3.5 h-3.5" />
-                              <span className="text-xs font-medium">Contests</span>
-                            </div>
-                            <div className="text-xl font-bold text-text">{profile.stats.contestsParticipated}</div>
+
+                        {profile.stats.badges && profile.stats.badges.length > 0 && (
+                          <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-border/40">
+                            <span className="text-xs text-text-secondary font-medium mr-1">Badges:</span>
+                            {profile.stats.badges.map((b: string, idx: number) => (
+                              <span key={idx} className="text-[10px] px-2 py-0.5 rounded bg-primary/10 border border-primary/20 text-primary font-bold">
+                                {b}
+                              </span>
+                            ))}
                           </div>
                         )}
                       </div>

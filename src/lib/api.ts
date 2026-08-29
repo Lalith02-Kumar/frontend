@@ -20,7 +20,8 @@ apiClient.interceptors.request.use(async (config) => {
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401 || error.response?.status === 403) {
+    // Only sign out if explicitly unauthorized (token invalid/revoked), not on 503 database errors
+    if (error.response?.status === 401 && error.response?.data?.error?.code === 'UNAUTHORIZED' && !error.config?.url?.includes('/auth/me')) {
       auth.signOut();
     }
     const message =
